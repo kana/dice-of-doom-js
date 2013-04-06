@@ -9,6 +9,13 @@
     return Math.floor(Math.random() * n);
   }
 
+  function repeat(s, n) {
+    var ss = [];
+    for (var i = 0; i < n; i++)
+      ss.push(s);
+    return ss.join('');
+  }
+
   function generateBoard() {
     // A board consists of many hex cells which are formed as a parallelogram
     // and each hex is indexed as follows:
