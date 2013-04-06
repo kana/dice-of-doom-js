@@ -40,5 +40,21 @@
     }
     return board;
   }
+
+  function drawBoardAsText(board) {
+    var cs = [];
+    for (var y = 0; y < boardHeight; y++) {
+      cs.push(repeat('  ', boardHeight - (y + 1)));
+      for (var x = 0; x < boardWidth; x++) {
+        var hex = board[y * boardWidth + x];
+        cs.push('[');
+        cs.push(makePlayerName(hex.player));
+        cs.push(hex.diceCount);
+        cs.push(']');
+      }
+      cs.push('\n');
+    }
+    return cs.join('');
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
