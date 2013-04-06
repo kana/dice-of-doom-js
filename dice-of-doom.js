@@ -16,6 +16,10 @@
     return ss.join('');
   }
 
+  function makePlayerName(playerId) {
+    return String.fromCharCode('A'.charCodeAt(0) + playerId);
+  }
+
   function generateBoard() {
     // A board consists of many hex cells which are formed as a parallelogram
     // and each hex is indexed as follows:
