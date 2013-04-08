@@ -73,7 +73,7 @@
         sourceIndex: null,
         destinationIndex: null,
         gameTree: makeGameTree(
-          board,  // TODO: addNewDice(board, player, spareDiceCount - 1)
+          addNewDice(board, player, spareDiceCount - 1),
           (player + 1) % numberOfPlayers,
           0,
           true
