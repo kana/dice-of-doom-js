@@ -86,5 +86,22 @@
   function calculateAttackingMoves(board, currentPlayer, spareDiceCount) {
     return [];  // TODO: Implement.
   }
+
+  function addNewDice(board, player, spareDiceCount) {
+    var c = spareDiceCount;
+    var newBoard = [];
+    for (var i = 0; i < board.length; i++) {
+      var h = board[i];
+      newBoard[i] = h;
+      if (0 < c && h.player == player && h.diceCount < maximumDice) {
+        newBoard[i] = {
+          player: h.player,
+          diceCount: h.diceCount + 1
+        };
+        c--;
+      }
+    }
+    return newBoard;
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
