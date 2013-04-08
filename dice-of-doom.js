@@ -56,5 +56,13 @@
     }
     return cs.join('');
   }
+
+  function makeGameTree(board, player, spareDiceCount, isFirstMove) {
+    return {
+      player: player,
+      board: board,
+      moves: []  // TODO: Implement.
+    };
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
