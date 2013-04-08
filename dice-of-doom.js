@@ -82,5 +82,9 @@
       return [passingMove].concat(moves);
     }
   }
+
+  function calculateAttackingMoves(board, currentPlayer, spareDiceCount) {
+    return [];  // TODO: Implement.
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
