@@ -64,5 +64,23 @@
       moves: []  // TODO: Implement.
     };
   }
+
+  function addPassingMove(board, player, spareDiceCount, isFirstMove, moves) {
+    if (isFirstMove) {
+      return moves;
+    } else {
+      var passingMove = {
+        sourceIndex: null,
+        destinationIndex: null,
+        gameTree: makeGameTree(
+          board,  // TODO: addNewDice(board, player, spareDiceCount - 1)
+          (player + 1) % numberOfPlayers,
+          0,
+          true
+        )
+      };
+      return [passingMove].concat(moves);
+    }
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
