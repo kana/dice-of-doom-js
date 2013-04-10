@@ -185,5 +185,19 @@
     $('#message').text('');
     $('#control').empty();
   }
+
+  function setUpControlsToChooseMove(moves) {
+    clearConsole();
+    $('#message').text('Choose your move:');
+    $('#control').append(
+      moves.map(function (m, i0) {
+        return $('<input type="button" class="btn">').
+          val((i0 + 1) + ': ' + makeMoveLabel(m)).
+          click(function () {
+            chooseMove(m.gameTree);
+          });
+      })
+    );
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
