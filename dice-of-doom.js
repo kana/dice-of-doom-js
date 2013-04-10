@@ -227,5 +227,15 @@
       })
     );
   }
+
+  function showWinners(board) {
+    clearConsole();
+    var winnerNames = calculateWinners(board).map(makePlayerName);
+    $('#message').text(
+      winnerNames.length == 1
+      ? 'The winner is ' + winnerNames[0]
+      : 'The game is a tie between ' + winnerNames.join(' and ')
+    );
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
