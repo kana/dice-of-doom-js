@@ -186,6 +186,11 @@
     $('#control').empty();
   }
 
+  function showGameStatus(gameTree) {
+    $('#game-board').text(drawBoardAsText(gameTree.board));
+    $('#current-player-name').text(makePlayerName(gameTree.player));
+  }
+
   function setUpControlsToChooseMove(moves) {
     clearConsole();
     $('#message').text('Choose your move:');
