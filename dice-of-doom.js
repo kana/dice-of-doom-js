@@ -61,7 +61,13 @@
     return {
       player: player,
       board: board,
-      moves: []  // TODO: Implement.
+      moves: addPassingMove(
+        board,
+        player,
+        spareDiceCount,
+        isFirstMove,
+        calculateAttackingMoves(board, player, spareDiceCount)
+      )
     };
   }
 
