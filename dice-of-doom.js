@@ -173,5 +173,10 @@
 
     return newBoard;
   }
+
+  function clearConsole() {
+    $('#message').text('');
+    $('#control').empty();
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
