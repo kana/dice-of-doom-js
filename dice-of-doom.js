@@ -181,6 +181,29 @@
       return 'Pass';
   }
 
+  function calculateWinners(board) {
+    var players = [];
+    for (var p = 0; p < numberOfPlayers; p++)
+      players.push(p);
+
+    var tally = board.map(function (hex) {return hex.player;});
+    var totals =
+      players.map(function (p) {
+        return [
+          p,
+          tally.filter(function (t) {return t == p;}).length
+        ];
+      });
+    var best = Math.max.apply(null, totals.map(function (pc) {return pc[1];}));
+
+    var winners =
+      totals
+      .filter(function (pc) {return pc[1] == best;})
+      .map(function (pc) {return pc[0];});
+    winners.sort();
+    return winners;
+  }
+
   function clearConsole() {
     $('#message').text('');
     $('#control').empty();
