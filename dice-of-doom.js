@@ -103,5 +103,29 @@
     }
     return newBoard;
   }
+
+  function calculateNeighborIndices(position) {
+    var candidates = [];
+
+    var up = position - boardWidth;
+    candidates.push(up);
+
+    var down = position + boardWidth;
+    candidates.push(down);
+
+    if (position % boardWidth != 0) {
+      candidates.push(up - 1);
+      candidates.push(position - 1);
+    }
+
+    if ((position + 1) % boardWidth != 0) {
+      candidates.push(position + 1);
+      candidates.push(down + 1);
+    }
+
+    return candidates.filter(function (p) {
+      return 0 <= p && p < boardHexCount;
+    });
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
