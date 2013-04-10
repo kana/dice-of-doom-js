@@ -250,5 +250,7 @@
   function startNewGame() {
     chooseMove(makeGameTree(generateBoard(), 0, 0, true));
   }
+
+  $(document).ready(startNewGame);
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
