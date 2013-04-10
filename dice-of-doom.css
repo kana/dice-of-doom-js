@@ -3,3 +3,10 @@
   font-family: monospace;
   white-space: pre;
 }
+
+#control .btn
+{
+  display: block;
+  margin-top: 0.25em;
+  margin-left: 1em;
+}
