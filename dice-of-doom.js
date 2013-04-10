@@ -174,6 +174,13 @@
     return newBoard;
   }
 
+  function makeMoveLabel(move) {
+    if (move.sourceIndex !== null && move.destinationIndex !== null)
+      return move.sourceIndex + ' \u2192 ' + move.destinationIndex;
+    else
+      return 'Pass';
+  }
+
   function clearConsole() {
     $('#message').text('');
     $('#control').empty();
