@@ -84,7 +84,32 @@
   }
 
   function calculateAttackingMoves(board, currentPlayer, spareDiceCount) {
-    return [];  // TODO: Implement.
+    var moves = [];
+
+    for (var si = 0; si < board.length; si++) {
+      var s = board[si];
+      if (s.player != currentPlayer)
+        continue;
+      var neighborIndices = calculateNeighborIndices(si);
+      for (var ni = 0; ni < neighborIndices.length; ni++) {
+        var di = neighborIndices[ni];
+        var d = board[di];
+        if (d.player != currentPlayer && d.diceCount < s.diceCount) {
+          moves.push({
+            sourceIndex: si,
+            destinationIndex: di,
+            gameTree: makeGameTree(
+              makeAttackedBoard(board, currentPlayer, si, di),
+              currentPlayer,
+              spareDiceCount + d.diceCount,
+              false
+            )
+          });
+        }
+      }
+    }
+
+    return moves;
   }
 
   function addNewDice(board, player, spareDiceCount) {
