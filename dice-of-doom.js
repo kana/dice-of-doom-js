@@ -237,5 +237,14 @@
       : 'The game is a tie between ' + winnerNames.join(' and ')
     );
   }
+
+  function chooseMove(gameTree) {
+    showGameStatus(gameTree);
+    if (1 <= gameTree.moves.length) {
+      setUpControlsToChooseMove(gameTree.moves);
+    } else {
+      showWinners(gameTree.board);
+    }
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
