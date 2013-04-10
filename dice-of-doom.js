@@ -127,5 +127,20 @@
       return 0 <= p && p < boardHexCount;
     });
   }
+
+  function makeAttackedBoard(board, player, sourceIndex, destinationIndex) {
+    var newBoard = [].concat(board);
+
+    newBoard[sourceIndex] = {
+      player: player,
+      diceCount: 1
+    };
+    newBoard[destinationIndex] = {
+      player: player,
+      diceCount: board[sourceIndex].diceCount - 1
+    };
+
+    return newBoard;
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
