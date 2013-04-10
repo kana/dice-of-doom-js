@@ -246,5 +246,9 @@
       showWinners(gameTree.board);
     }
   }
+
+  function startNewGame() {
+    chooseMove(makeGameTree(generateBoard(), 0, 0, true));
+  }
 })();
 // vim: expandtab softtabstop=2 shiftwidth=2
