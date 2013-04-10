@@ -236,6 +236,10 @@
       ? 'The winner is ' + winnerNames[0]
       : 'The game is a tie between ' + winnerNames.join(' and ')
     );
+    $('#control').append(
+      $('<input type="button" class="btn" value="Start a new game">').
+      click(startNewGame)
+    );
   }
 
   function chooseMove(gameTree) {
