@@ -238,7 +238,7 @@
   }
 
   function showGameStatus(gameTree) {
-    $('#game-board').text(drawBoardAsText(gameTree.board));
+    $('#game-board').html(drawBoardAsPreformattedHtml(gameTree.board));
     $('#current-player-name').text(makePlayerName(gameTree.player));
   }
 
