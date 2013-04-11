@@ -3,8 +3,8 @@
 
   var numberOfPlayers = 2;
   var maximumDice = 3;
-  var boardWidth = 2;
-  var boardHeight = 2;
+  var boardWidth = 4;
+  var boardHeight = 4;
   var boardHexCount = boardWidth * boardHeight;
 
   // }}}
