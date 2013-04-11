@@ -57,6 +57,34 @@
     return cs.join('');
   }
 
+  function drawBoardAsPreformattedHtml(board) {
+    var cs = [];
+    for (var y = 0; y < boardHeight; y++) {
+      cs.push(repeat('  ', boardHeight - (y + 1)));
+      for (var x = 0; x < boardWidth; x++) {
+        var hex = board[y * boardWidth + x];
+        cs.push('<span class="hex player-');
+        cs.push(hex.player);
+        cs.push('">');
+        cs.push('<span class="border">');
+        cs.push('[');
+        cs.push('</span>');
+        cs.push('<span class="player">');
+        cs.push(makePlayerName(hex.player));
+        cs.push('</span>');
+        cs.push('<span class="dice">');
+        cs.push(hex.diceCount);
+        cs.push('</span>');
+        cs.push('<span class="border">');
+        cs.push(']');
+        cs.push('</span>');
+        cs.push('</span>');
+      }
+      cs.push('\n');
+    }
+    return cs.join('');
+  }
+
   function makeGameTree(board, player, spareDiceCount, isFirstMove) {
     return {
       player: player,
