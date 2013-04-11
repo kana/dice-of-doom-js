@@ -1,9 +1,15 @@
 (function () {
+  // Constants {{{
+
   var numberOfPlayers = 2;
   var maximumDice = 3;
-  var boardWidth = 2;
-  var boardHeight = 2;
+  var boardWidth = 4;
+  var boardHeight = 4;
   var boardHexCount = boardWidth * boardHeight;
+
+  // }}}
+
+  // Misc. utilities {{{
 
   function random(n) {
     return Math.floor(Math.random() * n);
@@ -15,6 +21,29 @@
       ss.push(s);
     return ss.join('');
   }
+
+  // }}}
+
+  // Lazy evaluation {{{
+
+  function delay(expressionAsFunction) {
+    var result;
+    var isEvaluated = false;
+
+    return function () {
+      if (!isEvaluated)
+        result = expressionAsFunction();
+      return result;
+    };
+  }
+
+  function force(promise) {
+    return promise();
+  }
+
+  // }}}
+
+  // Game basics {{{
 
   function makePlayerName(playerId) {
     return String.fromCharCode('A'.charCodeAt(0) + playerId);
@@ -90,12 +119,14 @@
       var passingMove = {
         sourceIndex: null,
         destinationIndex: null,
-        gameTree: makeGameTree(
-          addNewDice(board, player, spareDiceCount - 1),
-          (player + 1) % numberOfPlayers,
-          0,
-          true
-        )
+        gameTreePromise: delay(function () {
+          return makeGameTree(
+            addNewDice(board, player, spareDiceCount - 1),
+            (player + 1) % numberOfPlayers,
+            0,
+            true
+          );
+        })
       };
       return [passingMove].concat(moves);
     }
@@ -104,28 +135,28 @@
   function calculateAttackingMoves(board, currentPlayer, spareDiceCount) {
     var moves = [];
 
-    for (var si = 0; si < board.length; si++) {
-      var s = board[si];
+    board.forEach(function (s, si) {
       if (s.player != currentPlayer)
-        continue;
+        return;
       var neighborIndices = calculateNeighborIndices(si);
-      for (var ni = 0; ni < neighborIndices.length; ni++) {
-        var di = neighborIndices[ni];
+      neighborIndices.forEach(function (di) {
         var d = board[di];
         if (d.player != currentPlayer && d.diceCount < s.diceCount) {
           moves.push({
             sourceIndex: si,
             destinationIndex: di,
-            gameTree: makeGameTree(
-              makeAttackedBoard(board, currentPlayer, si, di),
-              currentPlayer,
-              spareDiceCount + d.diceCount,
-              false
-            )
+            gameTreePromise: delay(function () {
+              return makeGameTree(
+                makeAttackedBoard(board, currentPlayer, si, di),
+                currentPlayer,
+                spareDiceCount + d.diceCount,
+                false
+              );
+            })
           });
         }
-      }
-    }
+      })
+    });
 
     return moves;
   }
@@ -186,6 +217,10 @@
     return newBoard;
   }
 
+  // }}}
+
+  // UI {{{
+
   function makeMoveLabel(move) {
     if (move.sourceIndex !== null && move.destinationIndex !== null)
       return move.sourceIndex + ' \u2192 ' + move.destinationIndex;
@@ -234,7 +269,7 @@
         return $('<input type="button" class="btn">').
           val((i0 + 1) + ': ' + makeMoveLabel(m)).
           click(function () {
-            chooseMove(m.gameTree);
+            chooseMove(force(m.gameTreePromise));
           });
       })
     );
@@ -267,6 +302,8 @@
     chooseMove(makeGameTree(generateBoard(), 0, 0, true));
   }
 
+  // }}}
+
   $(document).ready(startNewGame);
 })();
-// vim: expandtab softtabstop=2 shiftwidth=2
+// vim: expandtab softtabstop=2 shiftwidth=2 foldmethod=marker
