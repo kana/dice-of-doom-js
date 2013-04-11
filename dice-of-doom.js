@@ -1,9 +1,15 @@
 (function () {
+  // Constants {{{
+
   var numberOfPlayers = 2;
   var maximumDice = 3;
   var boardWidth = 2;
   var boardHeight = 2;
   var boardHexCount = boardWidth * boardHeight;
+
+  // }}}
+
+  // Misc. utilities {{{
 
   function random(n) {
     return Math.floor(Math.random() * n);
@@ -15,6 +21,10 @@
       ss.push(s);
     return ss.join('');
   }
+
+  // }}}
+
+  // Game basics {{{
 
   function makePlayerName(playerId) {
     return String.fromCharCode('A'.charCodeAt(0) + playerId);
@@ -186,6 +196,10 @@
     return newBoard;
   }
 
+  // }}}
+
+  // UI {{{
+
   function makeMoveLabel(move) {
     if (move.sourceIndex !== null && move.destinationIndex !== null)
       return move.sourceIndex + ' \u2192 ' + move.destinationIndex;
@@ -267,6 +281,8 @@
     chooseMove(makeGameTree(generateBoard(), 0, 0, true));
   }
 
+  // }}}
+
   $(document).ready(startNewGame);
 })();
-// vim: expandtab softtabstop=2 shiftwidth=2
+// vim: expandtab softtabstop=2 shiftwidth=2 foldmethod=marker
