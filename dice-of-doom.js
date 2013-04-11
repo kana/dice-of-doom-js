@@ -133,13 +133,11 @@
   function calculateAttackingMoves(board, currentPlayer, spareDiceCount) {
     var moves = [];
 
-    for (var si = 0; si < board.length; si++) {
-      var s = board[si];
+    board.forEach(function (s, si) {
       if (s.player != currentPlayer)
-        continue;
+        return;
       var neighborIndices = calculateNeighborIndices(si);
-      for (var ni = 0; ni < neighborIndices.length; ni++) {
-        var di = neighborIndices[ni];
+      neighborIndices.forEach(function (di) {
         var d = board[di];
         if (d.player != currentPlayer && d.diceCount < s.diceCount) {
           moves.push({
@@ -153,8 +151,8 @@
             )
           });
         }
-      }
-    }
+      })
+    });
 
     return moves;
   }
