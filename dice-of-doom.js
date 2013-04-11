@@ -119,12 +119,14 @@
       var passingMove = {
         sourceIndex: null,
         destinationIndex: null,
-        gameTree: makeGameTree(
-          addNewDice(board, player, spareDiceCount - 1),
-          (player + 1) % numberOfPlayers,
-          0,
-          true
-        )
+        gameTreePromise: delay(function () {
+          return makeGameTree(
+            addNewDice(board, player, spareDiceCount - 1),
+            (player + 1) % numberOfPlayers,
+            0,
+            true
+          );
+        })
       };
       return [passingMove].concat(moves);
     }
@@ -143,12 +145,14 @@
           moves.push({
             sourceIndex: si,
             destinationIndex: di,
-            gameTree: makeGameTree(
-              makeAttackedBoard(board, currentPlayer, si, di),
-              currentPlayer,
-              spareDiceCount + d.diceCount,
-              false
-            )
+            gameTreePromise: delay(function () {
+              return makeGameTree(
+                makeAttackedBoard(board, currentPlayer, si, di),
+                currentPlayer,
+                spareDiceCount + d.diceCount,
+                false
+              );
+            })
           });
         }
       })
@@ -265,7 +269,7 @@
         return $('<input type="button" class="btn">').
           val((i0 + 1) + ': ' + makeMoveLabel(m)).
           click(function () {
-            chooseMove(m.gameTree);
+            chooseMove(force(m.gameTreePromise));
           });
       })
     );
