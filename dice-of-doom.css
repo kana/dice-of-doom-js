@@ -4,6 +4,10 @@
   white-space: pre;
 }
 
+#game-board > .hex > .border {color: #999;}
+#game-board > .hex.player-0 {color: #00c;}
+#game-board > .hex.player-1 {color: #c00;}
+
 #control .btn
 {
   display: block;
