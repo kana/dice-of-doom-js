@@ -219,6 +219,24 @@
 
   // }}}
 
+  // AI {{{
+
+  function ratePotition(gameTree, player) {
+    var moves = gameTree.moves;
+    if (1 <= moves.length) {
+      var judge = gameTree.player == player ? 'max' : 'min';
+      return Math[judge].apply(null, calculateRatings(gameTree, player));
+    } else {
+      var winners = calculateWinners(gameTree.board);
+      if (0 <= winners.indexOf(player))
+        return 1 / winners.length;
+      else
+        return 0;
+    }
+  }
+
+  // }}}
+
   // UI {{{
 
   function makeMoveLabel(move) {
