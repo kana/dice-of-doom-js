@@ -289,6 +289,13 @@
   function showGameStatus(player, move, gameTree) {
     $('#game-board').html(drawBoardAsPreformattedHtml(gameTree.board));
     $('#current-player-name').text(makePlayerName(gameTree.player));
+    if (player == null) {
+      $('#log').empty();
+    } else {
+      $('#log').prepend($('<div class="line">').text(
+        makePlayerName(player) + ': ' + makeMoveLabel(move)
+      ));
+    }
   }
 
   function setUpControlsToChooseMoveByHuman(player, moves) {
