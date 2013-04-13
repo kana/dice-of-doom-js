@@ -329,7 +329,12 @@
   function updateScreenByMove(player, move, gameTree) {
     showGameStatus(player, move, gameTree);
     if (1 <= gameTree.moves.length) {
-      setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
+      if (gameTree.player == 0) {
+        setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
+      } else {
+        var move = chooseMoveByAI(gameTree);
+        updateScreenByMove(gameTree.player, move, force(move.gameTreePromise));
+      }
     } else {
       showWinners(gameTree.board);
     }
