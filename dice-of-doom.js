@@ -299,7 +299,7 @@
         return $('<input type="button" class="btn">').
           val((i0 + 1) + ': ' + makeMoveLabel(m)).
           click(function () {
-            updateScreenByMove(force(m.gameTreePromise));
+            updateScreenByMove(player, m, force(m.gameTreePromise));
           });
       })
     );
@@ -319,7 +319,7 @@
     );
   }
 
-  function updateScreenByMove(gameTree) {
+  function updateScreenByMove(player, move, gameTree) {
     showGameStatus(gameTree);
     if (1 <= gameTree.moves.length) {
       setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
@@ -329,7 +329,7 @@
   }
 
   function startNewGame() {
-    updateScreenByMove(makeGameTree(generateBoard(), 0, 0, true));
+    updateScreenByMove(null, null, makeGameTree(generateBoard(), 0, 0, true));
   }
 
   // }}}
