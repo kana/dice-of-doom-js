@@ -291,7 +291,7 @@
     $('#current-player-name').text(makePlayerName(gameTree.player));
   }
 
-  function setUpControlsToChooseMove(moves) {
+  function setUpControlsToChooseMoveByHuman(moves) {
     clearConsole();
     $('#message').text('Choose your move:');
     $('#control').append(
@@ -322,7 +322,7 @@
   function chooseMove(gameTree) {
     showGameStatus(gameTree);
     if (1 <= gameTree.moves.length) {
-      setUpControlsToChooseMove(gameTree.moves);
+      setUpControlsToChooseMoveByHuman(gameTree.moves);
     } else {
       showWinners(gameTree.board);
     }
