@@ -6,6 +6,7 @@
   var boardWidth = 4;
   var boardHeight = 4;
   var boardHexCount = boardWidth * boardHeight;
+  var aiLevel = 4;
 
   // }}}
 
@@ -219,6 +220,58 @@
 
   // }}}
 
+  // AI {{{
+
+  function limitGameTreeDepth(gameTree, depth) {
+    return {
+      player: gameTree.player,
+      board: gameTree.board,
+      moves:
+        depth == 0
+        ? []
+        : gameTree.moves.map(function (m) {
+          return {
+            sourceIndex: m.sourceIndex,
+            destinationIndex: m.destinationIndex,
+            gameTreePromise: delay(function () {
+              return limitGameTreeDepth(force(m.gameTreePromise), depth - 1);
+            })
+          };
+        })
+    };
+  }
+
+  function ratePotition(gameTree, player) {
+    var moves = gameTree.moves;
+    if (1 <= moves.length) {
+      var judge = gameTree.player == player ? 'max' : 'min';
+      return Math[judge].apply(null, calculateRatings(gameTree, player));
+    } else {
+      var winners = calculateWinners(gameTree.board);
+      if (0 <= winners.indexOf(player))
+        return 1 / winners.length;
+      else
+        return 0;
+    }
+  }
+
+  function calculateRatings(gameTree, player) {
+    return gameTree.moves.map(function (m) {
+      return ratePotition(force(m.gameTreePromise), player);
+    });
+  }
+
+  function chooseMoveByAI(gameTree) {
+    var ratings = calculateRatings(
+      limitGameTreeDepth(gameTree, aiLevel),
+      gameTree.player
+    );
+    var maxRating = Math.max.apply(null, ratings);
+    return gameTree.moves[ratings.indexOf(maxRating)];
+  }
+
+  // }}}
+
   // UI {{{
 
   function makeMoveLabel(move) {
@@ -256,12 +309,19 @@
     $('#control').empty();
   }
 
-  function showGameStatus(gameTree) {
+  function showGameStatus(player, move, gameTree) {
     $('#game-board').html(drawBoardAsPreformattedHtml(gameTree.board));
     $('#current-player-name').text(makePlayerName(gameTree.player));
+    if (player == null) {
+      $('#log').empty();
+    } else {
+      $('#log').prepend($('<div class="line">').text(
+        makePlayerName(player) + ': ' + makeMoveLabel(move)
+      ));
+    }
   }
 
-  function setUpControlsToChooseMove(moves) {
+  function setUpControlsToChooseMoveByHuman(player, moves) {
     clearConsole();
     $('#message').text('Choose your move:');
     $('#control').append(
@@ -269,7 +329,7 @@
         return $('<input type="button" class="btn">').
           val((i0 + 1) + ': ' + makeMoveLabel(m)).
           click(function () {
-            chooseMove(force(m.gameTreePromise));
+            updateScreenByMove(player, m, force(m.gameTreePromise));
           });
       })
     );
@@ -289,17 +349,22 @@
     );
   }
 
-  function chooseMove(gameTree) {
-    showGameStatus(gameTree);
+  function updateScreenByMove(player, move, gameTree) {
+    showGameStatus(player, move, gameTree);
     if (1 <= gameTree.moves.length) {
-      setUpControlsToChooseMove(gameTree.moves);
+      if (gameTree.player == 0) {
+        setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
+      } else {
+        var move = chooseMoveByAI(gameTree);
+        updateScreenByMove(gameTree.player, move, force(move.gameTreePromise));
+      }
     } else {
       showWinners(gameTree.board);
     }
   }
 
   function startNewGame() {
-    chooseMove(makeGameTree(generateBoard(), 0, 0, true));
+    updateScreenByMove(null, null, makeGameTree(generateBoard(), 0, 0, true));
   }
 
   // }}}
