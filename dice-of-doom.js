@@ -6,6 +6,7 @@
   var boardWidth = 4;
   var boardHeight = 4;
   var boardHexCount = boardWidth * boardHeight;
+  var aiLevel = 4;
 
   // }}}
 
