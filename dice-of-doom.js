@@ -222,6 +222,25 @@
 
   // AI {{{
 
+  function limitGameTreeDepth(gameTree, depth) {
+    return {
+      player: gameTree.player,
+      board: gameTree.board,
+      moves:
+        depth == 0
+        ? []
+        : gameTree.moves.map(function (m) {
+          return {
+            sourceIndex: m.sourceIndex,
+            destinationIndex: m.destinationIndex,
+            gameTreePromise: delay(function () {
+              return limitGameTreeDepth(force(m.gameTreePromise), depth - 1);
+            })
+          };
+        })
+    };
+  }
+
   function ratePotition(gameTree, player) {
     var moves = gameTree.moves;
     if (1 <= moves.length) {
