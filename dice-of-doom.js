@@ -286,7 +286,7 @@
     $('#control').empty();
   }
 
-  function showGameStatus(gameTree) {
+  function showGameStatus(player, move, gameTree) {
     $('#game-board').html(drawBoardAsPreformattedHtml(gameTree.board));
     $('#current-player-name').text(makePlayerName(gameTree.player));
   }
@@ -320,7 +320,7 @@
   }
 
   function updateScreenByMove(player, move, gameTree) {
-    showGameStatus(gameTree);
+    showGameStatus(player, move, gameTree);
     if (1 <= gameTree.moves.length) {
       setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
     } else {
