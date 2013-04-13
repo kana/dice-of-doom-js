@@ -241,6 +241,12 @@
     });
   }
 
+  function chooseMoveByAI(gameTree) {
+    var ratings = calculateRatings(gameTree, gameTree.player);
+    var maxRating = Math.max.apply(null, ratings);
+    return gameTree.moves[ratings.indexOf(maxRating)];
+  }
+
   // }}}
 
   // UI {{{
