@@ -235,6 +235,12 @@
     }
   }
 
+  function calculateRatings(gameTree, player) {
+    return gameTree.moves.map(function (m) {
+      return ratePotition(force(m.gameTreePromise), player);
+    });
+  }
+
   // }}}
 
   // UI {{{
