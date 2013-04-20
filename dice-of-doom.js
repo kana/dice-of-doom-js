@@ -241,6 +241,16 @@
     };
   }
 
+  function isThreatened(position, board) {
+    var hex = board[position];
+    var player = hex.player;
+    var diceCount = hex.diceCount;
+    return calculateNeighborIndices(position).some(function (np) {
+      var nhex = board[np];
+      return player != nhex.player && diceCount < nhex.diceCount;
+    });
+  }
+
   function ratePotition(gameTree, player) {
     var moves = gameTree.moves;
     if (1 <= moves.length) {
