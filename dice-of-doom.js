@@ -251,6 +251,18 @@
     });
   }
 
+  function scoreHex(position, board, player) {
+    var hex = board[position];
+    if (hex.player == player) {
+      if (isThreatened(position, board))
+        return 1;
+      else
+        return 2;
+    } else {
+      return -1;
+    }
+  }
+
   function ratePotition(gameTree, player) {
     var moves = gameTree.moves;
     if (1 <= moves.length) {
