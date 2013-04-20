@@ -76,8 +76,11 @@
     for (var y = 0; y < boardHeight; y++) {
       cs.push(repeat('  ', boardHeight - (y + 1)));
       for (var x = 0; x < boardWidth; x++) {
-        var hex = board[y * boardWidth + x];
-        cs.push('<span class="hex player-');
+        var position = y * boardWidth + x;
+        var hex = board[position];
+        cs.push('<span id="hex-');
+        cs.push(position);
+        cs.push('" class="hex player-');
         cs.push(hex.player);
         cs.push('">');
         cs.push('<span class="border">');
@@ -400,18 +403,60 @@
     }
   }
 
-  function setUpControlsToChooseMoveByHuman(player, moves) {
+  var lastSourceIndex;
+
+  function setUpControlsToChooseMoveByHuman(player, moves, mode) {
     clearConsole();
-    $('#message').text('Choose your move:');
-    $('#control').append(
-      moves.map(function (m, i0) {
-        return $('<input type="button" class="btn">').
-          val((i0 + 1) + ': ' + makeMoveLabel(m)).
-          click(function () {
-            updateScreenByMove(player, m, force(m.gameTreePromise));
-          });
-      })
-    );
+    if (mode == 'from') {
+      var passingMove = moves[0].sourceIndex === null ? moves[0] : null;
+      $('#message').text(
+        (!passingMove) ? 'Choose a hex to move.' :
+        moves.length == 1 ? 'No hex to move.' :
+        'Choose a hex to move.'
+      );
+      if (passingMove) {
+        $('#control').append(
+          $('<input type="button" class="btn">')
+          .val(makeMoveLabel(passingMove))
+          .click(function () {
+            updateScreenByMove(
+              player,
+              passingMove,
+              force(passingMove.gameTreePromise)
+            );
+          })
+        );
+      }
+      $(moves.map(function (m) {return '#hex-' + m.sourceIndex;}).join(', '))
+      .addClass('source')
+      .click(function () {
+        lastSourceIndex = parseInt($(this).attr('id').replace(/^hex-/, ''));
+        $('.source.hex').removeClass('source').unbind('click');
+        setUpControlsToChooseMoveByHuman(player, moves, 'to');
+      });
+    } else {  // 'to'
+      $('#message').text('Move ' + lastSourceIndex + ' to...?');
+      moves
+      .filter(function (m) {return m.sourceIndex == lastSourceIndex;})
+      .forEach(function (m) {
+        $('#hex-' + m.destinationIndex)
+        .addClass('destination')
+        .click(function () {
+          lastSourceIndex = null;
+          updateScreenByMove(player, m, force(m.gameTreePromise));
+        });
+      });
+      $('#hex-' + lastSourceIndex)
+      .addClass('cancel')
+      .click(function () {
+        lastSourceIndex = null;
+        $('.destination.hex, .cancel.hex')
+        .removeClass('destination')
+        .removeClass('cancel')
+        .unbind('click');
+        setUpControlsToChooseMoveByHuman(player, moves, 'from');
+      });
+    }
   }
 
   function showWinners(board) {
@@ -432,7 +477,11 @@
     showGameStatus(player, move, gameTree);
     if (1 <= gameTree.moves.length) {
       if (gameTree.player == 0) {
-        setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
+        setUpControlsToChooseMoveByHuman(
+          gameTree.player,
+          gameTree.moves,
+          'from'
+        );
       } else {
         clearConsole();
         $('#message').text('Now thinking...');

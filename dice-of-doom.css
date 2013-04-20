@@ -7,6 +7,9 @@
 #game-board > .hex > .border {color: #999;}
 #game-board > .hex.player-0 {color: #00c;}
 #game-board > .hex.player-1 {color: #c00;}
+#game-board > .hex.source {background-color: #cfc; cursor: pointer;}
+#game-board > .hex.destination {background-color: #fcc; cursor: pointer;}
+#game-board > .hex.cancel {background-color: #ddd; cursor: pointer;}
 
 #control .btn
 {
