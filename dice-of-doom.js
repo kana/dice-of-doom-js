@@ -403,7 +403,7 @@
     }
   }
 
-  function setUpControlsToChooseMoveByHuman(player, moves) {
+  function setUpControlsToChooseMoveByHuman(player, moves, mode) {
     clearConsole();
     $('#message').text('Choose your move:');
     $('#control').append(
@@ -435,7 +435,11 @@
     showGameStatus(player, move, gameTree);
     if (1 <= gameTree.moves.length) {
       if (gameTree.player == 0) {
-        setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
+        setUpControlsToChooseMoveByHuman(
+          gameTree.player,
+          gameTree.moves,
+          'from'
+        );
       } else {
         clearConsole();
         $('#message').text('Now thinking...');
