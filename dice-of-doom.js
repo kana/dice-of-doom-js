@@ -434,8 +434,15 @@
       if (gameTree.player == 0) {
         setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
       } else {
-        var move = chooseMoveByAI(gameTree);
-        updateScreenByMove(gameTree.player, move, force(move.gameTreePromise));
+        clearConsole();
+        $('#message').text('Now thinking...');
+        setTimeout(
+          function () {
+            var m = chooseMoveByAI(gameTree);
+            updateScreenByMove(gameTree.player, m, force(m.gameTreePromise));
+          },
+          1000
+        );
       }
     } else {
       showWinners(gameTree.board);
