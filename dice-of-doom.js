@@ -435,6 +435,7 @@
         setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
       } else {
         clearConsole();
+        $('#message').text('Now thinking...');
         setTimeout(
           function () {
             var m = chooseMoveByAI(gameTree);
