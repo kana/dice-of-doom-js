@@ -76,8 +76,11 @@
     for (var y = 0; y < boardHeight; y++) {
       cs.push(repeat('  ', boardHeight - (y + 1)));
       for (var x = 0; x < boardWidth; x++) {
-        var hex = board[y * boardWidth + x];
-        cs.push('<span class="hex player-');
+        var position = y * boardWidth + x;
+        var hex = board[position];
+        cs.push('<span id="hex-');
+        cs.push(position);
+        cs.push('" class="hex player-');
         cs.push(hex.player);
         cs.push('">');
         cs.push('<span class="border">');
