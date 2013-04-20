@@ -241,17 +241,41 @@
     };
   }
 
+  function isThreatened(position, board) {
+    var hex = board[position];
+    var player = hex.player;
+    var diceCount = hex.diceCount;
+    return calculateNeighborIndices(position).some(function (np) {
+      var nhex = board[np];
+      return player != nhex.player && diceCount < nhex.diceCount;
+    });
+  }
+
+  function scoreHex(position, board, player) {
+    var hex = board[position];
+    if (hex.player == player) {
+      if (isThreatened(position, board))
+        return 1;
+      else
+        return 2;
+    } else {
+      return -1;
+    }
+  }
+
+  function scoreBoard(board, player) {
+    return board.reduce(function (total, _, position) {
+      return total + scoreHex(position, board, player);
+    }, 0);
+  }
+
   function ratePotition(gameTree, player) {
     var moves = gameTree.moves;
     if (1 <= moves.length) {
       var judge = gameTree.player == player ? 'max' : 'min';
       return Math[judge].apply(null, calculateRatings(gameTree, player));
     } else {
-      var winners = calculateWinners(gameTree.board);
-      if (0 <= winners.indexOf(player))
-        return 1 / winners.length;
-      else
-        return 0;
+      return scoreBoard(gameTree.board, player);
     }
   }
 
