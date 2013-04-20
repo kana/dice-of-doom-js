@@ -303,6 +303,24 @@
     return ratings;
   }
 
+  function calculateMinRatings(gameTree, player, upperLimit, lowerLimit) {
+    var newUpperLimit = upperLimit;
+    var ratings = [];
+    for (var i = 0; i < gameTree.moves.length; i++) {
+      var r = ratePositionWithAlphaBetaPruning(
+        force(gameTree.moves[i].gameTreePromise),
+        player,
+        newUpperLimit,
+        lowerLimit
+      );
+      ratings.push(r);
+      if (r <= lowerLimit)
+        break;
+      newUpperLimit = Math.min(r, newUpperLimit);
+    }
+    return ratings;
+  }
+
   function chooseMoveByAI(gameTree) {
     var ratings = calculateRatings(
       limitGameTreeDepth(gameTree, aiLevel),
