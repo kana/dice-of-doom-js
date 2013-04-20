@@ -321,6 +321,23 @@
     return ratings;
   }
 
+  function ratePositionWithAlphaBetaPruning(gameTree, player, upperLimit, lowerLimit) {
+    var moves = gameTree.moves;
+    if (1 <= moves.length) {
+      var judge =
+        gameTree.player == player
+        ? Math.max
+        : Math.min;
+      var rate =
+        gameTree.player == player
+        ? calculateMaxRatings
+        : calculateMinRatings;
+      return judge.apply(null, rate(gameTree, player, upperLimit, lowerLimit));
+    } else {
+      return scoreBoard(gameTree.board, player);
+    }
+  }
+
   function chooseMoveByAI(gameTree) {
     var ratings = calculateRatings(
       limitGameTreeDepth(gameTree, aiLevel),
