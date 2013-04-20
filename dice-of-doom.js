@@ -285,6 +285,24 @@
     });
   }
 
+  function calculateMaxRatings(gameTree, player, upperLimit, lowerLimit) {
+    var ratings = [];
+    var newLowerLimit = lowerLimit;
+    for (var i = 0; i < gameTree.moves.length; i++) {
+      var r = ratePositionWithAlphaBetaPruning(
+        force(gameTree.moves[i].gameTreePromise),
+        player,
+        upperLimit,
+        newLowerLimit
+      );
+      ratings.push(r);
+      if (upperLimit <= r)
+        break;
+      newLowerLimit = Math.max(r, newLowerLimit);
+    }
+    return ratings;
+  }
+
   function chooseMoveByAI(gameTree) {
     var ratings = calculateRatings(
       limitGameTreeDepth(gameTree, aiLevel),
