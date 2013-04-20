@@ -485,13 +485,19 @@
       } else {
         clearConsole();
         $('#message').text('Now thinking...');
-        setTimeout(
-          function () {
-            var m = chooseMoveByAI(gameTree);
-            updateScreenByMove(gameTree.player, m, force(m.gameTreePromise));
-          },
-          1000
-        );
+        var st = Date.now();
+        var m = chooseMoveByAI(gameTree);
+        var et = Date.now();
+        var dt = et - st;
+        $('#message').text('Now thinking... (took ' + dt + 'ms)');
+        if (m.sourceIndex !== null) {
+          $('#hex-' + m.sourceIndex).addClass('source');
+          $('#hex-' + m.destinationIndex).addClass('destination');
+        }
+        var highlightingDuration = m.sourceIndex !== null ? 1500 : 0;
+        setTimeout(function () {
+          updateScreenByMove(gameTree.player, m, force(m.gameTreePromise));
+        }, highlightingDuration);
       }
     } else {
       showWinners(gameTree.board);
