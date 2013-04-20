@@ -339,9 +339,11 @@
   }
 
   function chooseMoveByAI(gameTree) {
-    var ratings = calculateRatings(
+    var ratings = calculateMaxRatings(
       limitGameTreeDepth(gameTree, aiLevel),
-      gameTree.player
+      gameTree.player,
+      Number.MAX_VALUE,
+      Number.MIN_VALUE
     );
     var maxRating = Math.max.apply(null, ratings);
     return gameTree.moves[ratings.indexOf(maxRating)];
