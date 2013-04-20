@@ -285,10 +285,65 @@
     });
   }
 
+  function calculateMaxRatings(gameTree, player, upperLimit, lowerLimit) {
+    var ratings = [];
+    var newLowerLimit = lowerLimit;
+    for (var i = 0; i < gameTree.moves.length; i++) {
+      var r = ratePositionWithAlphaBetaPruning(
+        force(gameTree.moves[i].gameTreePromise),
+        player,
+        upperLimit,
+        newLowerLimit
+      );
+      ratings.push(r);
+      if (upperLimit <= r)
+        break;
+      newLowerLimit = Math.max(r, newLowerLimit);
+    }
+    return ratings;
+  }
+
+  function calculateMinRatings(gameTree, player, upperLimit, lowerLimit) {
+    var newUpperLimit = upperLimit;
+    var ratings = [];
+    for (var i = 0; i < gameTree.moves.length; i++) {
+      var r = ratePositionWithAlphaBetaPruning(
+        force(gameTree.moves[i].gameTreePromise),
+        player,
+        newUpperLimit,
+        lowerLimit
+      );
+      ratings.push(r);
+      if (r <= lowerLimit)
+        break;
+      newUpperLimit = Math.min(r, newUpperLimit);
+    }
+    return ratings;
+  }
+
+  function ratePositionWithAlphaBetaPruning(gameTree, player, upperLimit, lowerLimit) {
+    var moves = gameTree.moves;
+    if (1 <= moves.length) {
+      var judge =
+        gameTree.player == player
+        ? Math.max
+        : Math.min;
+      var rate =
+        gameTree.player == player
+        ? calculateMaxRatings
+        : calculateMinRatings;
+      return judge.apply(null, rate(gameTree, player, upperLimit, lowerLimit));
+    } else {
+      return scoreBoard(gameTree.board, player);
+    }
+  }
+
   function chooseMoveByAI(gameTree) {
-    var ratings = calculateRatings(
+    var ratings = calculateMaxRatings(
       limitGameTreeDepth(gameTree, aiLevel),
-      gameTree.player
+      gameTree.player,
+      Number.MAX_VALUE,
+      Number.MIN_VALUE
     );
     var maxRating = Math.max.apply(null, ratings);
     return gameTree.moves[ratings.indexOf(maxRating)];
