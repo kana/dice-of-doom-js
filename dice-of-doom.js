@@ -485,7 +485,11 @@
       } else {
         clearConsole();
         $('#message').text('Now thinking...');
+        var st = Date.now();
         var m = chooseMoveByAI(gameTree);
+        var et = Date.now();
+        var dt = et - st;
+        $('#message').text('Now thinking... (took ' + dt + 'ms)');
         if (m.sourceIndex !== null) {
           $('#hex-' + m.sourceIndex).addClass('source');
           $('#hex-' + m.destinationIndex).addClass('destination');
