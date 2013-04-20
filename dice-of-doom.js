@@ -434,6 +434,7 @@
       if (gameTree.player == 0) {
         setUpControlsToChooseMoveByHuman(gameTree.player, gameTree.moves);
       } else {
+        clearConsole();
         setTimeout(
           function () {
             var m = chooseMoveByAI(gameTree);
