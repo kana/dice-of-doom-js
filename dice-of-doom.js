@@ -263,6 +263,12 @@
     }
   }
 
+  function scoreBoard(board, player) {
+    return board.reduce(function (total, _, position) {
+      return total + scoreHex(position, board, player);
+    }, 0);
+  }
+
   function ratePotition(gameTree, player) {
     var moves = gameTree.moves;
     if (1 <= moves.length) {
